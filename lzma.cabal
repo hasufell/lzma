@@ -33,6 +33,11 @@ description:
       * </package/lzma-conduit lzma-conduit> (for </package/conduit conduit>)
     .
 
+flag use-pkgconfig-lzma
+  description: get lzma lib config from pkg-config
+  manual: False
+  default: True
+
 extra-source-files:
   Changelog.md
 
@@ -54,8 +59,11 @@ library
   if os(windows)
     build-depends:     lzma-clib
   else
-    includes:          lzma.h
-    extra-libraries:   lzma
+    if flag(use-pkgconfig-lzma)
+      pkgconfig-depends: lzma
+    else
+      includes:          lzma.h
+      extra-libraries:   lzma
 
   c-sources:           cbits/lzma_wrapper.c
 
